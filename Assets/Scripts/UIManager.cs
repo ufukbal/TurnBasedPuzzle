@@ -1,15 +1,27 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class UIManager : MonoBehaviour {
 
-	// Use this for initialization
+	[SerializeField]
+	Button RestartButton;
+
+	Player player;
+	LevelManager levelManager;
+
 	void Start () {
-	
+		player = GameObject.FindObjectOfType<Player> ();
+		levelManager = GameObject.FindObjectOfType<LevelManager> ();
+		player.OnGameOver += GameOverUI;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	void GameOverUI(){
+		RestartButton.gameObject.SetActive (true);
 	}
+
+	public void RestartButtonClick(){
+		levelManager.RestartLevel ();
+	}
+
 }
