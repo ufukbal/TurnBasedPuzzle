@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class Player : MonoBehaviour {
 
@@ -10,29 +11,31 @@ public class Player : MonoBehaviour {
     Vector3 positionToMoveTo;
     Vector3 currentMove;
     Vector3 checkDirection;
+
     bool checkedDiagonal = false;
     bool isMoving = false;
+
     Vector3 transformUp;
     Vector3 currentMoveCenter;
+
     Ray currentMoveRay;
     Ray wallCheckRay;
 	Ray checkObstacleRay;
 
-	int currentLevel = 0;
 
-	Goal goal;
+	LevelManager levelManager;
 
 	public ParticleSystem enemyDeathFx;
 	public ParticleSystem playerDeathFx;
 
-	public event System.Action OnMove; //turn
+	public event Action OnTurn; //turn
+	public event Action OnGameOver; 
 
     void Start() {
-		goal = FindObjectOfType<Goal> ();
+		
+		levelManager = FindObjectOfType<LevelManager> ();
 
-		for (int i = currentLevel+1; i < goal.levels.Length; i++) {
-			goal.levels [i].SetActive (false);
-		}
+		levelManager.RestartLevel ();
 
         positionToMoveTo = invalidPosition;
 
@@ -124,7 +127,7 @@ public class Player : MonoBehaviour {
 				KillEnemy (hit.transform.parent, offset);
 			}
 			else if (hit.collider.tag == "Deadly") {
-				Debug.Log ("Die");
+				
 				transformUp = hit.normal;
 				positionToMoveTo = pointToCheck;
 			}
@@ -134,7 +137,7 @@ public class Player : MonoBehaviour {
 				int.TryParse(hit.collider.name, out nextLevel);
 				transformUp = hit.normal;
 				positionToMoveTo = pointToCheck;
-				goal.LoadNextLevel (nextLevel+1);
+				levelManager.LoadNextLevel (nextLevel+1);
 			}
 			else if (hit.collider.tag == "Obstacle") {
 				Debug.Log ("Can't move");
@@ -201,7 +204,7 @@ public class Player : MonoBehaviour {
 			else if (hit.collider.tag == "Deadly") {
 				transformUp = hit.normal;
 				Debug.Log ("Dies");
-				Die (-hit.normal);
+				KillPlayer (-hit.normal);
 				return true;
 			}
 			else if (hit.collider.tag == "Obstacle") {
@@ -214,13 +217,13 @@ public class Player : MonoBehaviour {
     }
 
 	public void GameOver(){
-		
+		if (OnGameOver != null)
+			OnGameOver (); 
 	}
 
 	public void ProcessAIMove(){
-		if (OnMove != null)
-			OnMove (); 
-	
+		if (OnTurn != null)
+			OnTurn (); 	
 	}
 
 	public void checkObstacle(){ //check after movement for overlapping objects
@@ -234,7 +237,8 @@ public class Player : MonoBehaviour {
 		if (Physics.Raycast(checkObstacleRay, out hit, 1f)) {
 			if (hit.collider.tag == "Obstacle") {
 				
-				Die(-checkDirection);
+				KillPlayer(-checkDirection);
+
 				Debug.Log ("die check obstacle");
 			}
 				
@@ -243,7 +247,8 @@ public class Player : MonoBehaviour {
 				transformUp = hit.normal;
 				positionToMoveTo = pointToCheck;
 				Debug.Log ("Dies");
-				Die (-checkDirection);
+				KillPlayer (-checkDirection);
+
 			}
 
 		}
@@ -255,10 +260,12 @@ public class Player : MonoBehaviour {
 		Debug.Log (impactDirection);
 		obj.gameObject.SetActive (false);
 	}
-	public void Die(Vector3 impactDirection){
+
+	public void KillPlayer(Vector3 impactDirection){
 		Debug.Log (impactDirection);
 		Instantiate (playerDeathFx, transform.position, Quaternion.FromToRotation(Vector3.forward, impactDirection));
 		this.gameObject.SetActive (false);
+		GameOver ();
 	}
 
     void OnDrawGizmos() {

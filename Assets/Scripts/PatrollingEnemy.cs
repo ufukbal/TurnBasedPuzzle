@@ -12,7 +12,7 @@ public class PatrollingEnemy : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindObjectOfType<Player> ();
-		player.OnMove += Patrol;
+		player.OnTurn += Patrol;
 	}
 	
 	// Update is called once per frame
