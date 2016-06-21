@@ -5,19 +5,29 @@ using System.Collections.Generic;
 public class PatrollingEnemy : MonoBehaviour {
 
 	public List<Transform> waypoints;
-	public bool isInc = true;
+	public bool startInc;
+	private bool isInc = true;
 	public float timeToMove = 1f;
-	public int currentWaypointIndex = 0;
+	private int currentWaypointIndex = 0;
+	public int startWaypointIndex;
 	Player player;
 	// Use this for initialization
 	void Start () {
+		ResetPatrol ();
 		player = GameObject.FindObjectOfType<Player> ();
 		player.OnTurn += Patrol;
 	}
-	
+
+
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	public void ResetPatrol(){
+		transform.position = waypoints [startWaypointIndex].transform.position;
+		currentWaypointIndex = startWaypointIndex;
+		isInc = startInc;
 	}
 
 	void Patrol(){
