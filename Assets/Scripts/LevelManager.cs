@@ -4,11 +4,11 @@ using System.Collections;
 public class LevelManager : MonoBehaviour {
 
 	public GameObject[] levels;
-	int currentLevel = 0;
+	public int currentLevel = 0;
 
 	Player player;
 
-	void Start () {
+	void Awake () {
 		player = GameObject.FindObjectOfType<Player> ();
 	}
 
@@ -32,8 +32,23 @@ public class LevelManager : MonoBehaviour {
 
 		levels [currentLevel].SetActive (true);
 		player.gameObject.transform.position = levels [currentLevel].transform.GetChild (1).GetChild (0).transform.position;
+
+		//reset enemies
+		foreach (Transform child in levels [currentLevel].transform.GetChild (2).transform) {
+			child.gameObject.SetActive (true);
+		}
+
+		//reset patrolling enemies
+		foreach (PatrollingEnemy child in levels [currentLevel].transform.GetChild (3).transform.GetComponentsInChildren<PatrollingEnemy>()) {
+			child.gameObject.SetActive (true);
+			child.ResetPatrol ();
+		}
+
 		player.gameObject.transform.rotation = Quaternion.identity;
+		player.currentMoveCenter = player.transform.position;
 		player.gameObject.SetActive (true);
+		player.ResetRays ();
+
 	}
 
 }

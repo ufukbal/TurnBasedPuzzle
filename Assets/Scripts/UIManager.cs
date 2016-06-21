@@ -22,6 +22,9 @@ public class UIManager : MonoBehaviour {
 
 	public void RestartButtonClick(){
 		levelManager.RestartLevel ();
+		RestartButton.gameObject.SetActive (false);
 	}
+
+
 
 }

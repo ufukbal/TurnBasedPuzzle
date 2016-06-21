@@ -6,7 +6,7 @@ public class Player : MonoBehaviour {
 
     public bool drawDebugGizmos = false;
     public float timeToMove = 1f;
-
+	public Vector3 pointToCheck;
     Vector3 invalidPosition = new Vector3(9999, 9999, 9999);
     Vector3 positionToMoveTo;
     Vector3 currentMove;
@@ -16,7 +16,7 @@ public class Player : MonoBehaviour {
     bool isMoving = false;
 
     Vector3 transformUp;
-    Vector3 currentMoveCenter;
+  	public Vector3 currentMoveCenter;
 
     Ray currentMoveRay;
     Ray wallCheckRay;
@@ -37,9 +37,14 @@ public class Player : MonoBehaviour {
 
 		levelManager.RestartLevel ();
 
-        positionToMoveTo = invalidPosition;
-
+		ResetRays ();
     }
+	public void ResetRays(){
+		checkObstacleRay = new Ray (currentMoveCenter, Vector3.zero);
+		wallCheckRay = new Ray (currentMoveCenter, Vector3.zero);
+		currentMoveRay = new Ray (currentMoveCenter, Vector3.zero);
+		positionToMoveTo = invalidPosition;
+	}
 
 	void Update () {
         if (isMoving) {
@@ -108,7 +113,7 @@ public class Player : MonoBehaviour {
     }
 
     void Move(Vector3 offset) {
-        Vector3 pointToCheck = transform.position + offset;
+        pointToCheck = transform.position + offset;
 
         currentMoveCenter = pointToCheck;
         currentMoveRay = new Ray(currentMoveCenter, checkDirection);
@@ -146,19 +151,23 @@ public class Player : MonoBehaviour {
         }
 
         if (positionToMoveTo != invalidPosition) {
+			Debug.Log ("returned");
             return;
         }
 
         if (WallCheck()) {
 			ProcessAIMove ();
+			Debug.Log ("Wall Check");
             StartCoroutine("ChangeOrientation");
             return;
         }
         else if (!checkedDiagonal) {
+			Debug.Log ("checkedDiagonal");
             checkedDiagonal = true;
             checkDirection = currentMove * -1;
             Move(currentMove + transform.up * -1);
         }
+		Debug.Log ("Nothing");
     }
 
     IEnumerator ChangeOrientation() {
@@ -228,7 +237,7 @@ public class Player : MonoBehaviour {
 
 	public void checkObstacle(){ //check after movement for overlapping objects
 		ResetChecks ();
-		Vector3 pointToCheck = transform.position;
+		pointToCheck = transform.position;
 
 
 		checkObstacleRay = new Ray(pointToCheck,checkDirection);
