@@ -44,7 +44,6 @@ public class PatrollingEnemy : MonoBehaviour {
 			//return waypoints [currentWaypointIndex];
 		if (this.gameObject.transform.parent.parent.gameObject.activeSelf) { // check if level is active
 			StartCoroutine ("PerformMove");
-//				Debug.Log (waypoints [currentWaypointIndex]);
 		}
 
 	}

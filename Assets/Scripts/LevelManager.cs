@@ -40,8 +40,10 @@ public class LevelManager : MonoBehaviour {
 		//reset enemies
 		foreach (Transform child in levels [currentLevel].transform.GetChild (2).transform) {
 			child.gameObject.SetActive (true);
+
 			if(child.GetComponentInChildren<RotatingEnemy>()!= null)
 				child.GetComponentInChildren<RotatingEnemy>().ResetEnemyRotation ();
+
 		}
 
 		//reset patrolling enemies
@@ -50,10 +52,6 @@ public class LevelManager : MonoBehaviour {
 			child.ResetPatrol ();
 		}
 
-//		foreach (Transform child in levels [currentLevel].transform.FindChild ("RotatingEnemies").transform) {
-//			child.gameObject.SetActive (true);
-//
-//		}
 
 		player.gameObject.transform.rotation = Quaternion.identity;
 		player.currentMoveCenter = player.transform.position;
