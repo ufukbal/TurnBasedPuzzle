@@ -29,23 +29,20 @@ public class Player : MonoBehaviour {
 	public ParticleSystem playerDeathFx;
 
 	public event Action OnTurn; //turn
-	public event Action OnGameOver; 
+	public event Action OnGameOver;
+	public event Action LevelFinished;
+
+	public int moveCount = 1;
 
     void Start() {
-		
+
 		levelManager = FindObjectOfType<LevelManager> ();
 
 		levelManager.RestartLevel ();
 
 		ResetRays ();
     }
-	public void ResetRays(){
-		checkObstacleRay = new Ray (currentMoveCenter, Vector3.zero);
-		wallCheckRay = new Ray (currentMoveCenter, Vector3.zero);
-		currentMoveRay = new Ray (currentMoveCenter, Vector3.zero);
-		positionToMoveTo = invalidPosition;
-	}
-
+		
 	void Update () {
         if (isMoving) {
             return;
@@ -89,6 +86,12 @@ public class Player : MonoBehaviour {
         }
     }
 
+	public void ResetRays(){
+		checkObstacleRay = new Ray (currentMoveCenter, Vector3.zero);
+		wallCheckRay = new Ray (currentMoveCenter, Vector3.zero);
+		currentMoveRay = new Ray (currentMoveCenter, Vector3.zero);
+		positionToMoveTo = invalidPosition;
+	}
 
 
     IEnumerator PerformMove() {
@@ -142,7 +145,9 @@ public class Player : MonoBehaviour {
 				int.TryParse(hit.collider.name, out nextLevel);
 				transformUp = hit.normal;
 				positionToMoveTo = pointToCheck;
-				levelManager.LoadNextLevel (nextLevel+1);
+				//levelManager.LoadNextLevel (nextLevel+1);
+				if (LevelFinished != null)
+					LevelFinished ();
 			}
 			else if (hit.collider.tag == "Obstacle") {
 				Debug.Log ("Can't move");
@@ -231,14 +236,16 @@ public class Player : MonoBehaviour {
 	}
 
 	public void ProcessAIMove(){
+		moveCount++;
 		if (OnTurn != null)
 			OnTurn (); 	
+		
 	}
 
 	public void checkObstacle(){ //check after movement for overlapping objects
+		
 		ResetChecks ();
 		pointToCheck = transform.position;
-
 
 		checkObstacleRay = new Ray(pointToCheck,checkDirection);
 
