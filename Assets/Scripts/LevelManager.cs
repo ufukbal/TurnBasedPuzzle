@@ -4,12 +4,14 @@ using System.Collections;
 public class LevelManager : MonoBehaviour {
 
 	public GameObject[] levels;
+	public int[] moveLimits;
 	public int currentLevel = 0;
 
 	Player player;
 
 	void Awake () {
 		player = GameObject.FindObjectOfType<Player> ();
+		//player.LevelFinished += LoadNextLevel;
 	}
 
 	// Update is called once per frame
@@ -17,12 +19,14 @@ public class LevelManager : MonoBehaviour {
 
 	}
 
-	public void LoadNextLevel(int level){
-		if (levels [level] != null) {
-			levels [level].SetActive (true);
-			levels [level - 1].SetActive (false);
-			currentLevel = level;
+	public void LoadNextLevel(){
+		if (levels [currentLevel+1] != null) {
+			levels [currentLevel+1].SetActive (true);
+			levels [currentLevel +1 - 1].SetActive (false);
+			currentLevel = currentLevel +1;
 		}
+		player.enabled = true;
+		player.moveCount = 0;
 	}
 
 	public void RestartLevel(){
@@ -46,6 +50,7 @@ public class LevelManager : MonoBehaviour {
 
 		player.gameObject.transform.rotation = Quaternion.identity;
 		player.currentMoveCenter = player.transform.position;
+		player.moveCount = 0;
 		player.gameObject.SetActive (true);
 		player.ResetRays ();
 
