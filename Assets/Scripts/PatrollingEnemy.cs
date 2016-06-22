@@ -8,7 +8,7 @@ public class PatrollingEnemy : MonoBehaviour {
 	public bool startInc;
 	private bool isInc = true;
 	public float timeToMove = 1f;
-	private int currentWaypointIndex = 0;
+	public int currentWaypointIndex = 0;
 	public int startWaypointIndex;
 	Player player;
 	// Use this for initialization
@@ -44,7 +44,7 @@ public class PatrollingEnemy : MonoBehaviour {
 			//return waypoints [currentWaypointIndex];
 		if (this.gameObject.transform.parent.parent.gameObject.activeSelf) { // check if level is active
 			StartCoroutine ("PerformMove");
-			Debug.Log (waypoints [currentWaypointIndex]);
+//				Debug.Log (waypoints [currentWaypointIndex]);
 		}
 
 	}
