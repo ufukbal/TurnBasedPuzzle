@@ -29,6 +29,39 @@ public class LevelManager : MonoBehaviour {
 		player.moveCount = 0;
 	}
 
+	public void LoadLevel(int level){
+		for (int i = 0; i < levels.Length; i++) {
+			levels [i].SetActive (false);
+		}
+
+		levels [level].SetActive (true);
+		currentLevel = level;
+		player.gameObject.transform.position = levels [level].transform.GetChild (1).GetChild (0).transform.position;
+
+		//reset enemies
+		foreach (Transform child in levels [level].transform.GetChild (2).transform) {
+			child.gameObject.SetActive (true);
+
+			if(child.GetComponentInChildren<RotatingEnemy>()!= null)
+				child.GetComponentInChildren<RotatingEnemy>().ResetEnemyRotation ();
+
+		}
+
+		//reset patrolling enemies
+		foreach (PatrollingEnemy child in levels [level].transform.GetChild (3).transform.GetComponentsInChildren<PatrollingEnemy>()) {
+			child.gameObject.SetActive (true);
+			child.ResetPatrol ();
+		}
+
+
+		player.gameObject.transform.rotation = Quaternion.identity;
+		player.currentMoveCenter = player.transform.position;
+		player.moveCount = 0;
+		player.gameObject.SetActive (true);
+		player.ResetRays ();
+		player.enabled = true;
+	}
+
 	public void RestartLevel(){
 		for (int i = 0; i < levels.Length; i++) {
 			levels [i].SetActive (false);
@@ -58,6 +91,7 @@ public class LevelManager : MonoBehaviour {
 		player.moveCount = 0;
 		player.gameObject.SetActive (true);
 		player.ResetRays ();
+		player.enabled = true;
 
 	}
 
