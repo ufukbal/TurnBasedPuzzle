@@ -289,22 +289,20 @@ public class Player : MonoBehaviour {
             return;
         }
 
-        // Draw a gizmo at the center point for our current move. This is where
-        // we raycast from etc.
+        // Current Move
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(currentMoveCenter, 0.1f);
 
-        // Draw the ray we use to check if there's a walkable node beneath our feet.
+        // Node check
        Gizmos.color = Color.red;
         Gizmos.DrawRay(currentMoveRay);
 
-        // Draw the ray we use to check if there is a wall in the direction we're
-        // trying to move.
+        // Wall Check
         Gizmos.color = Color.blue;
         Gizmos.DrawRay(wallCheckRay);
-
-		Gizmos.color = Color.green;
-		Gizmos.DrawRay(checkObstacleRay);
+	// Obstacle Check	    
+	Gizmos.color = Color.green;
+	Gizmos.DrawRay(checkObstacleRay);
 
     }
 }
