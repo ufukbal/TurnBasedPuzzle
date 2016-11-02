@@ -18,12 +18,6 @@ public class PatrollingEnemy : MonoBehaviour {
 		player.OnTurn += Patrol;
 	}
 
-
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
 	public void ResetPatrol(){
 		transform.position = waypoints [startWaypointIndex].transform.position;
 		currentWaypointIndex = startWaypointIndex;
@@ -40,8 +34,6 @@ public class PatrollingEnemy : MonoBehaviour {
 			if (currentWaypointIndex == 0 || currentWaypointIndex == waypoints.Count - 1)
 				isInc = !isInc;
 	
-
-			//return waypoints [currentWaypointIndex];
 		if (this.gameObject.transform.parent.parent.gameObject.activeSelf) { // check if level is active
 			StartCoroutine ("PerformMove");
 		}
