@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LevelManager : MonoBehaviour {
+public class LevelManager : MonoBehaviour
+{
 
 	public GameObject[] levels;
 	public int[] moveLimits;
@@ -9,27 +10,27 @@ public class LevelManager : MonoBehaviour {
 
 	Player player;
 
-	void Awake () {
+	void Awake ()
+	{
 		player = GameObject.FindObjectOfType<Player> ();
+
 		//player.LevelFinished += LoadNextLevel;
+		//Disabled after new leven end ui
 	}
 
-	// Update is called once per frame
-	void Update () {
-
-	}
-
-	public void LoadNextLevel(){
-		if (levels [currentLevel+1] != null) {
-			levels [currentLevel+1].SetActive (true);
-			levels [currentLevel +1 - 1].SetActive (false);
-			currentLevel = currentLevel +1;
+	public void LoadNextLevel ()
+	{
+		if (levels [currentLevel + 1] != null) {
+			levels [currentLevel + 1].SetActive (true);
+			levels [currentLevel + 1 - 1].SetActive (false);
+			currentLevel = currentLevel + 1;
 		}
 		player.enabled = true;
 		player.moveCount = 0;
 	}
 
-	public void LoadLevel(int level){
+	public void LoadLevel (int level)
+	{
 		for (int i = 0; i < levels.Length; i++) {
 			levels [i].SetActive (false);
 		}
@@ -38,12 +39,12 @@ public class LevelManager : MonoBehaviour {
 		currentLevel = level;
 		player.gameObject.transform.position = levels [level].transform.GetChild (1).GetChild (0).transform.position;
 
-		//reset enemies
+		//reset turrets
 		foreach (Transform child in levels [level].transform.GetChild (2).transform) {
 			child.gameObject.SetActive (true);
 
-			if(child.GetComponentInChildren<RotatingEnemy>()!= null)
-				child.GetComponentInChildren<RotatingEnemy>().ResetEnemyRotation ();
+			if (child.GetComponentInChildren<RotatingEnemy> () != null)
+				child.GetComponentInChildren<RotatingEnemy> ().ResetEnemyRotation ();
 
 		}
 
@@ -62,7 +63,8 @@ public class LevelManager : MonoBehaviour {
 		player.enabled = true;
 	}
 
-	public void RestartLevel(){
+	public void RestartLevel ()
+	{
 		for (int i = 0; i < levels.Length; i++) {
 			levels [i].SetActive (false);
 		}
@@ -74,8 +76,8 @@ public class LevelManager : MonoBehaviour {
 		foreach (Transform child in levels [currentLevel].transform.GetChild (2).transform) {
 			child.gameObject.SetActive (true);
 
-			if(child.GetComponentInChildren<RotatingEnemy>()!= null)
-				child.GetComponentInChildren<RotatingEnemy>().ResetEnemyRotation ();
+			if (child.GetComponentInChildren<RotatingEnemy> () != null)
+				child.GetComponentInChildren<RotatingEnemy> ().ResetEnemyRotation ();
 
 		}
 

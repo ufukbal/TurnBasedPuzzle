@@ -284,6 +284,7 @@ public class Player : MonoBehaviour {
 		GameOver ();
 	}
 
+	#region gizmos
     void OnDrawGizmos() {
         if (!drawDebugGizmos) {
             return;
@@ -305,4 +306,5 @@ public class Player : MonoBehaviour {
 	Gizmos.DrawRay(checkObstacleRay);
 
     }
+	#endregion
 }

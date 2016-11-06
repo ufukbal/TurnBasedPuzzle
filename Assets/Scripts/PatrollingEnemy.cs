@@ -3,15 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PatrollingEnemy : MonoBehaviour {
-
+	[SerializeField]
 	public List<Transform> waypoints;
-	public bool startInc;
+	[SerializeField]
+	private bool startInc;
 	private bool isInc = true;
-	public float timeToMove = 1f;
-	public int currentWaypointIndex = 0;
-	public int startWaypointIndex;
+	private float timeToMove = 0.3f;
+	private int currentWaypointIndex = 0;
+	[SerializeField]
+	private int startWaypointIndex;
 	Player player;
-	// Use this for initialization
+
 	void Start () {
 		ResetPatrol ();
 		player = GameObject.FindObjectOfType<Player> ();
